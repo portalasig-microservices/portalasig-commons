@@ -1,7 +1,4 @@
-# Read Me First
-The following was discovered as part of building this project:
-
-* The original package name 'com.portalsig.portalasig-commons' is invalid and this project uses 'com.portalsig.portalasigcommons' instead.
+# PortalAsig Commons
 
 # Getting Started
 

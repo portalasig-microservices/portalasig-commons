@@ -8,13 +8,16 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.portalasig</groupId>
-	<artifactId>portalasig-commons</artifactId>
+	<artifactId>microservices-core-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>portalasig-commons</name>
-	<description>Common core library for PortalAsig microservices ecosystem</description>
+
+	<name>${project.artifactId}</name>
+	<description>Specifies dependency versions for PortalAsig microservices ecosystem</description>
 	<modules>
 		<module>core-lib</module>
+		<module>core-backend-parent</module>
 	</modules>
 	<packaging>pom</packaging>
 	<properties>

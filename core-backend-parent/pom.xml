@@ -9,14 +9,23 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core-lib</artifactId>
+    <artifactId>core-backend-parent</artifactId>
+    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Common library for PortalAsig Backend</description>
+    <description>Adds dependencies backend projects should use</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.portalasig</groupId>
+            <artifactId>core-lib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

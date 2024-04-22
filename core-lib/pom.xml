@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.portalasig</groupId>
-        <artifactId>microservices-core-parent</artifactId>
+        <artifactId>core-parent</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 

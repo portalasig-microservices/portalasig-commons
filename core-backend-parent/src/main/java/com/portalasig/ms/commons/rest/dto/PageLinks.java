@@ -1,4 +1,4 @@
-package com.portalasig.ms.commons.dto;
+package com.portalasig.ms.commons.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;

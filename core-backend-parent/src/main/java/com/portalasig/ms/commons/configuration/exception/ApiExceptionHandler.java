@@ -1,10 +1,7 @@
 package com.portalasig.ms.commons.configuration.exception;
 
 import com.portalasig.ms.commons.rest.dto.ApiError;
-import com.portalasig.ms.commons.rest.exception.BadRequestException;
-import com.portalasig.ms.commons.rest.exception.ConflictException;
-import com.portalasig.ms.commons.rest.exception.NotFoundException;
-import com.portalasig.ms.commons.rest.exception.PreconditionFailedException;
+import com.portalasig.ms.commons.rest.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,6 +54,18 @@ public class ApiExceptionHandler {
         return ApiError
                 .builder()
                 .title("Conflict Exception")
+                .status(ex.getErrorCode())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(SystemErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleInternalServerErrorHttpClientException(ConflictException ex) {
+        return ApiError
+                .builder()
+                .title("Internal Server Error")
                 .status(ex.getErrorCode())
                 .message(ex.getMessage())
                 .dateTime(LocalDateTime.now())

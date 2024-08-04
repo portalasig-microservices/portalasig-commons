@@ -18,7 +18,7 @@ public class ConflictException extends RuntimeException {
     /**
      * Conflict Exception exception constructor.
      *
-     * @param message    error description
+     * @param message error description
      */
     public ConflictException(String message) {
         super(message);

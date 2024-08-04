@@ -20,7 +20,7 @@ public class PreconditionFailedException extends ValidationException {
     /**
      * Precondition Failed exception constructor.
      *
-     * @param message    error description
+     * @param message error description
      */
     public PreconditionFailedException(String message) {
         super(message);

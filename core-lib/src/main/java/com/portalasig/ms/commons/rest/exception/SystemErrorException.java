@@ -18,9 +18,9 @@ public class SystemErrorException extends RuntimeException {
     /**
      * System Error exception constructor.
      *
-     * @param errorCode      error_code
-     * @param message    error description
-     * @param cause      actual exception
+     * @param errorCode error_code
+     * @param message   error description
+     * @param cause     actual exception
      */
     public SystemErrorException(int errorCode, String message, Throwable cause) {
         super(message, cause);
@@ -30,8 +30,8 @@ public class SystemErrorException extends RuntimeException {
     /**
      * System Error exception constructor.
      *
-     * @param errorCode      error_code
-     * @param message    error description
+     * @param errorCode error_code
+     * @param message   error description
      */
     public SystemErrorException(int errorCode, String message) {
         super(message);
@@ -41,7 +41,7 @@ public class SystemErrorException extends RuntimeException {
     /**
      * System Error exception constructor.
      *
-     * @param message    error description
+     * @param message error description
      */
     public SystemErrorException(String message) {
         super(message);

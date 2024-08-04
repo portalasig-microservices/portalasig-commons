@@ -1,4 +1,5 @@
 package com.portalasig.ms.commons.autoconfiguration;
+
 import com.portalasig.ms.commons.configuration.exception.ApiExceptionHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;

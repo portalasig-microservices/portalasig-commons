@@ -18,7 +18,7 @@ public class BadRequestException extends RuntimeException {
     /**
      * Bad Request exception constructor.
      *
-     * @param message    error description
+     * @param message error description
      */
     public BadRequestException(String message) {
         super(message);

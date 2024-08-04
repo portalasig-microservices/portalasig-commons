@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Not Found exception to include error codes/title.
- * */
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -20,7 +20,7 @@ public class NotFoundException extends NoSuchElementException {
     /**
      * Not Found Exception exception constructor.
      *
-     * @param message    error description
+     * @param message error description
      */
     public NotFoundException(String message) {
         super(message);

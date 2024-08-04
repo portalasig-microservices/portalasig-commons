@@ -1,4 +1,4 @@
-package com.portalasig.ms.commons.dto;
+package com.portalasig.ms.commons.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -50,12 +50,6 @@ public class Paginated<T> implements Iterable<T> {
     @JsonProperty
     private PageLinks links;
 
-    @JsonIgnore
-    @Override
-    public Iterator<T> iterator() {
-        return content.iterator();
-    }
-
     private static PageLinks createPageLinks(Page<?> page, UriComponentsBuilder basePath) {
         String next = null;
         if (page.getNumber() + 1 < page.getTotalPages()) {
@@ -92,14 +86,10 @@ public class Paginated<T> implements Iterable<T> {
     /**
      * Creates a paginated response from a page.
      *
-     * @param <T>
-     *         element type
-     * @param page
-     *         source page
-     * @param content
-     *         page elements
-     * @param basePath
-     *         base URI path for links
+     * @param <T>      element type
+     * @param page     source page
+     * @param content  page elements
+     * @param basePath base URI path for links
      * @return paginated
      */
     public static <T> Paginated<T> wrap(Page<T> page, List<T> content, UriComponentsBuilder basePath) {
@@ -111,14 +101,10 @@ public class Paginated<T> implements Iterable<T> {
     /**
      * Creates a paginated response from a page.
      *
-     * @param <T>
-     *         element type
-     * @param page
-     *         source page
-     * @param content
-     *         page elements
-     * @param basePath
-     *         base URI path for links
+     * @param <T>      element type
+     * @param page     source page
+     * @param content  page elements
+     * @param basePath base URI path for links
      * @return paginated
      */
     public static <T> Paginated<T> wrap(Page<T> page, List<T> content, String basePath) {
@@ -128,12 +114,9 @@ public class Paginated<T> implements Iterable<T> {
     /**
      * Creates a paginated response from a page.
      *
-     * @param <T>
-     *         element type
-     * @param page
-     *         source page
-     * @param basePath
-     *         base URI path for links
+     * @param <T>      element type
+     * @param page     source page
+     * @param basePath base URI path for links
      * @return paginated
      */
     public static <T> Paginated<T> wrap(Page<T> page, String basePath) {
@@ -143,10 +126,8 @@ public class Paginated<T> implements Iterable<T> {
     /**
      * Creates a paginated response using the current request URI as the base path for links.
      *
-     * @param <T>
-     *         element type
-     * @param page
-     *         page of data
+     * @param <T>  element type
+     * @param page page of data
      * @return paginated response
      */
     public static <T> Paginated<T> wrap(Page<T> page) {
@@ -162,13 +143,17 @@ public class Paginated<T> implements Iterable<T> {
     /**
      * Creates a paginated response from a page excluding page links.
      *
-     * @param <T>
-     *         element type
-     * @param page
-     *         page of data
+     * @param <T>  element type
+     * @param page page of data
      * @return paginated response
      */
     public static <T> Paginated<T> wrapExcludingPageLinks(Page<T> page) {
         return wrap(page, page.getContent());
+    }
+
+    @JsonIgnore
+    @Override
+    public Iterator<T> iterator() {
+        return content.iterator();
     }
 }

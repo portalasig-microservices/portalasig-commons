@@ -6,8 +6,7 @@ package com.portalasig.ms.commons.persistence;
  * rename the enum constant without having to worry about migrating values
  * previously stored with the old name.
  *
- * @param <C>
- *         code representation type
+ * @param <C> code representation type
  */
 public interface Codeable<C> {
 

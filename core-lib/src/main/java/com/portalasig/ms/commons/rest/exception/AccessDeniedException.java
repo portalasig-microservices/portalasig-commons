@@ -5,25 +5,23 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.util.NoSuchElementException;
-
 /**
- * Not Found exception to include error codes/title.
+ * AccessDeniedException to include error codes/title.
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class NotFoundException extends NoSuchElementException {
+public class AccessDeniedException extends RuntimeException {
 
     private int errorCode;
 
     /**
-     * Not Found Exception exception constructor.
+     * AccessDeniedException constructor.
      *
      * @param message error description
      */
-    public NotFoundException(String message) {
+    public AccessDeniedException(String message) {
         super(message);
-        this.errorCode = HttpStatus.NOT_FOUND.value();
+        this.errorCode = HttpStatus.FORBIDDEN.value();
     }
 }

@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class NotFoundException extends NoSuchElementException {
+public class ResourceNotFoundException extends NoSuchElementException {
 
     private int errorCode;
 
@@ -22,7 +22,7 @@ public class NotFoundException extends NoSuchElementException {
      *
      * @param message error description
      */
-    public NotFoundException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
         this.errorCode = HttpStatus.NOT_FOUND.value();
     }

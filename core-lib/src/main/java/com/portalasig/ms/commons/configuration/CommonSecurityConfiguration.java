@@ -1,5 +1,7 @@
 package com.portalasig.ms.commons.configuration;
 
+import com.portalasig.ms.commons.rest.security.CurrentAuthentication;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -8,6 +10,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class CommonSecurityConfiguration {
 
     @Bean
@@ -18,5 +21,10 @@ public class CommonSecurityConfiguration {
         JwtAuthenticationConverter converterResponse = new JwtAuthenticationConverter();
         converterResponse.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return converterResponse;
+    }
+
+    @Bean
+    public CurrentAuthentication currentAuthentication() {
+        return new CurrentAuthentication();
     }
 }

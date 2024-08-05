@@ -1,10 +1,7 @@
 package com.portalasig.ms.commons.configuration.exception;
 
 import com.portalasig.ms.commons.rest.dto.ApiError;
-import com.portalasig.ms.commons.rest.exception.BadRequestException;
-import com.portalasig.ms.commons.rest.exception.ConflictException;
-import com.portalasig.ms.commons.rest.exception.NotFoundException;
-import com.portalasig.ms.commons.rest.exception.PreconditionFailedException;
+import com.portalasig.ms.commons.rest.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,9 +12,9 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleNotFoundHttpClientException(NotFoundException ex) {
+    public ApiError handleNotFoundHttpClientException(ResourceNotFoundException ex) {
         return ApiError
                 .builder()
                 .title("Not Found")
@@ -57,6 +54,30 @@ public class ApiExceptionHandler {
         return ApiError
                 .builder()
                 .title("Conflict Exception")
+                .status(ex.getErrorCode())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleForbiddenResourceHttpClientException(ConflictException ex) {
+        return ApiError
+                .builder()
+                .title("Access denied")
+                .status(ex.getErrorCode())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleInvalidTokenHttpClientException(ConflictException ex) {
+        return ApiError
+                .builder()
+                .title("Invalid token")
                 .status(ex.getErrorCode())
                 .message(ex.getMessage())
                 .dateTime(LocalDateTime.now())

@@ -1,12 +1,19 @@
 package com.portalasig.ms.commons.configuration.exception;
 
 import com.portalasig.ms.commons.rest.dto.ApiError;
-import com.portalasig.ms.commons.rest.exception.*;
+import com.portalasig.ms.commons.rest.exception.AccessDeniedException;
+import com.portalasig.ms.commons.rest.exception.BadRequestException;
+import com.portalasig.ms.commons.rest.exception.ConflictException;
+import com.portalasig.ms.commons.rest.exception.InvalidTokenException;
+import com.portalasig.ms.commons.rest.exception.PreconditionFailedException;
+import com.portalasig.ms.commons.rest.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -83,4 +90,29 @@ public class ApiExceptionHandler {
                 .dateTime(LocalDateTime.now())
                 .build();
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    public ApiError handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return ApiError
+                .builder()
+                .title("Precondition Failed")
+                .status(ex.getStatusCode().value())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
+        return ApiError
+                .builder()
+                .title("Database Integrity Violation")
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+
 }

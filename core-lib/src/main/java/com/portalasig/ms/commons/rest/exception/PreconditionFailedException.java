@@ -1,11 +1,11 @@
 package com.portalasig.ms.commons.rest.exception;
 
+import jakarta.validation.ValidationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import javax.validation.ValidationException;
 
 /**
  * Precondition failed exception.

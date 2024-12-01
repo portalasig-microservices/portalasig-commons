@@ -3,7 +3,7 @@ name: Build and Verify Services
 on:
   pull_request:
     branches:
-      - develop
+      - master
 
 jobs:
   build:

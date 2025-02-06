@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,22 @@ public class CurrentAuthentication {
             );
         }
     }
+
+    public Jwt getJwtToken() {
+        return (Jwt) getAuthentication().getPrincipal();
+    }
+
+    public Long getIdentity() {
+        Authentication authentication = this.getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
+            Object identity = jwt.getClaims().get("identity");
+            if (identity instanceof Number) {
+                return ((Number) identity).longValue();
+            }
+        }
+        return null;
+    }
+
 
     public String getClientId() {
         return getAuthentication().getName();

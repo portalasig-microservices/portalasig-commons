@@ -53,14 +53,8 @@ public class CurrentAuthentication {
     }
 
     public Long getIdentity() {
-        Authentication authentication = this.getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
-            Object identity = jwt.getClaims().get("identity");
-            if (identity instanceof Number) {
-                return ((Number) identity).longValue();
-            }
-        }
-        return null;
+        String identity = (String) this.getJwtToken().getClaims().getOrDefault("username", null);
+        return Long.parseLong(identity);
     }
 
 

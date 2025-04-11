@@ -7,7 +7,9 @@ import com.portalasig.ms.commons.rest.exception.ConflictException;
 import com.portalasig.ms.commons.rest.exception.InvalidTokenException;
 import com.portalasig.ms.commons.rest.exception.PreconditionFailedException;
 import com.portalasig.ms.commons.rest.exception.ResourceNotFoundException;
+import com.portalasig.ms.commons.rest.exception.SystemErrorException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -113,6 +115,20 @@ public class ApiExceptionHandler {
                 .message(ex.getMessage())
                 .dateTime(LocalDateTime.now())
                 .build();
+    }
+
+    @ExceptionHandler(SystemErrorException.class)
+    public ResponseEntity<ApiError> handleSystemErrorException(SystemErrorException ex) {
+        ApiError apiError = ApiError.builder()
+                .title(HttpStatus.valueOf(ex.getErrorCode()).getReasonPhrase())
+                .status(ex.getErrorCode())
+                .message(ex.getMessage())
+                .dateTime(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(ex.getErrorCode())
+                .body(apiError);
     }
 
 }

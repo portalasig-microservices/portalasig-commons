@@ -16,7 +16,6 @@ public class JacksonSerializationConfiguration {
     @Primary
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
         return new Jackson2ObjectMapperBuilder()
-                .featuresToEnable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
                 .featuresToEnable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
                 .featuresToEnable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .featuresToEnable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)

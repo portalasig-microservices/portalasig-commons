@@ -54,7 +54,11 @@ public class CurrentAuthentication {
 
     public Long getIdentity() {
         String identity = (String) this.getJwtToken().getClaims().getOrDefault("username", null);
-        return Long.parseLong(identity);
+        try {
+            return identity != null ? Long.parseLong(identity) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.portalasig.ms.commons.configuration.exception;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.portalasig.ms.commons.rest.dto.ApiError;
 import com.portalasig.ms.commons.rest.exception.AccessDeniedException;
 import com.portalasig.ms.commons.rest.exception.BadRequestException;
@@ -8,18 +9,23 @@ import com.portalasig.ms.commons.rest.exception.InvalidTokenException;
 import com.portalasig.ms.commons.rest.exception.PreconditionFailedException;
 import com.portalasig.ms.commons.rest.exception.ResourceNotFoundException;
 import com.portalasig.ms.commons.rest.exception.SystemErrorException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ApiExceptionHandler {
+
+    private final ObjectMapper objectMapper;
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -128,6 +134,24 @@ public class ApiExceptionHandler {
 
         return ResponseEntity
                 .status(ex.getErrorCode())
+                .body(apiError);
+    }
+
+    @ExceptionHandler(WebClientResponseException.class)
+    public ResponseEntity<ApiError> handleWebClientResponseException(WebClientResponseException ex) {
+        ApiError apiError;
+        try {
+            apiError = objectMapper.readValue(ex.getResponseBodyAsString(), ApiError.class);
+        } catch (Exception e) {
+            apiError = ApiError.builder()
+                    .title(HttpStatus.valueOf(ex.getStatusCode().value()).getReasonPhrase())
+                    .status(ex.getStatusCode().value())
+                    .message(ex.getResponseBodyAsString())
+                    .dateTime(LocalDateTime.now())
+                    .build();
+        }
+        return ResponseEntity
+                .status(ex.getStatusCode())
                 .body(apiError);
     }
 

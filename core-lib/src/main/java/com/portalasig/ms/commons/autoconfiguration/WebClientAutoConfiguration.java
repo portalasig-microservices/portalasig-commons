@@ -1,10 +1,14 @@
 package com.portalasig.ms.commons.autoconfiguration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
@@ -24,6 +28,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class WebClientAutoConfiguration {
 
+    private final ObjectMapper objectMapper;
+
     @Bean("clientCredentialsWebClient")
     @Primary
     public WebClient clientCredentialsWebClient(
@@ -31,12 +37,30 @@ public class WebClientAutoConfiguration {
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(oauth2AuthorizedClientManager);
         oauth2Client.setDefaultClientRegistrationId("portalasig_engine");
-        return WebClient.builder().filter(oauth2Client).build();
+        return WebClient
+                .builder()
+                .filter(oauth2Client)
+                .codecs(configurer -> configurer.defaultCodecs()
+                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper))
+                )
+                .codecs(configurer -> configurer.defaultCodecs()
+                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper))
+                )
+                .build();
     }
 
     @Bean("jwtTokenWebClient")
     public WebClient jwtTokenWebClient(ExchangeFilterFunction bearerAuthFromSecurityContext) {
-        return WebClient.builder().filter(bearerAuthFromSecurityContext).build();
+        return WebClient
+                .builder()
+                .filter(bearerAuthFromSecurityContext)
+                .codecs(configurer -> configurer.defaultCodecs()
+                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper))
+                )
+                .codecs(configurer -> configurer.defaultCodecs()
+                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper))
+                )
+                .build();
     }
 
     @Bean

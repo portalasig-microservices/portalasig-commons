@@ -1,5 +1,8 @@
 package com.portalasig.ms.commons.constants;
 
+/**
+ * Constants used for REST API endpoints and content types.
+ */
 public class RestConstants {
 
     public static final String VERSION_ONE = "/v1";

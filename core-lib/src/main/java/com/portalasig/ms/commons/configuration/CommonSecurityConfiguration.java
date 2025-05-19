@@ -8,11 +8,26 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
+/**
+ * Common security configuration for the application.
+ * <p>
+ * This configuration:
+ * <ul>
+ *   <li>Enables method-level security annotations.</li>
+ *   <li>Customizes JWT authority extraction using the "authorities" claim without a prefix.</li>
+ *   <li>Provides a bean for accessing the current authentication context.</li>
+ * </ul>
+ */
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class CommonSecurityConfiguration {
 
+    /**
+     * Configures a JwtAuthenticationConverter to extract authorities from the "authorities" claim without a prefix.
+     *
+     * @return a customized JwtAuthenticationConverter bean
+     */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -23,6 +38,11 @@ public class CommonSecurityConfiguration {
         return converterResponse;
     }
 
+    /**
+     * Provides a bean for accessing the current authentication context.
+     *
+     * @return a CurrentAuthentication bean
+     */
     @Bean
     public CurrentAuthentication currentAuthentication() {
         return new CurrentAuthentication();

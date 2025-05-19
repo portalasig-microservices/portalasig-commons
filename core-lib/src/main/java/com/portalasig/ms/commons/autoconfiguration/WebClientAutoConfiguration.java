@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,12 +23,18 @@ import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
+/**
+ * Configuration for WebClient beans.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class WebClientAutoConfiguration {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * WebClient with client_credentials flow.
+     */
     @Bean("clientCredentialsWebClient")
     @Primary
     public WebClient clientCredentialsWebClient(
@@ -37,32 +42,32 @@ public class WebClientAutoConfiguration {
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(oauth2AuthorizedClientManager);
         oauth2Client.setDefaultClientRegistrationId("portalasig_engine");
-        return WebClient
-                .builder()
+        return WebClient.builder()
                 .filter(oauth2Client)
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper))
-                )
+                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper)))
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper))
-                )
+                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper)))
                 .build();
     }
 
+    /**
+     * WebClient with bearer token from security context.
+     */
     @Bean("jwtTokenWebClient")
     public WebClient jwtTokenWebClient(ExchangeFilterFunction bearerAuthFromSecurityContext) {
-        return WebClient
-                .builder()
+        return WebClient.builder()
                 .filter(bearerAuthFromSecurityContext)
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper))
-                )
+                        .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper)))
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper))
-                )
+                        .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper)))
                 .build();
     }
 
+    /**
+     * Extracts JWT from SecurityContext and adds it as Bearer token.
+     */
     @Bean
     public ExchangeFilterFunction bearerAuthFromSecurityContext() {
         return (request, next) -> {
@@ -70,48 +75,55 @@ public class WebClientAutoConfiguration {
             if (auth instanceof JwtAuthenticationToken jwtAuth) {
                 return next.exchange(
                         ClientRequest.from(request)
-                                .headers(
-                                        headers -> headers.setBearerAuth(jwtAuth.getToken().getTokenValue())
-                                )
-                                .build()
-                );
+                                .headers(headers -> headers.setBearerAuth(jwtAuth.getToken().getTokenValue()))
+                                .build());
             }
             return next.exchange(request);
         };
     }
 
+    /**
+     * Registers OAuth2 client for client_credentials flow.
+     */
     @Bean
-    ReactiveClientRegistrationRepository clientRegistrations(
+    public ReactiveClientRegistrationRepository clientRegistrations(
             @Value("${spring.security.oauth2.client.provider.portalasig_engine.token-uri}")
-            String token_uri,
+            String tokenUri,
             @Value("${spring.security.oauth2.client.registration.portalasig_engine.client-id}")
-            String client_id,
+            String clientId,
             @Value("${spring.security.oauth2.client.registration.portalasig_engine.client-secret}")
-            String client_secret,
-            @Value(
-                    "${spring.security.oauth2.client.registration.portalasig_engine.authorization-grant-type}")
-            String authorizationGrantType) {
+            String clientSecret,
+            @Value("${spring.security.oauth2.client.registration.portalasig_engine.authorization-grant-type}")
+            String authGrantType) {
 
-        ClientRegistration registration =
-                ClientRegistration.withRegistrationId("portalasig_engine")
-                        .tokenUri(token_uri)
-                        .clientId(client_id)
-                        .clientSecret(client_secret)
-                        .authorizationGrantType(new AuthorizationGrantType(authorizationGrantType))
-                        .build();
+        ClientRegistration registration = ClientRegistration
+                .withRegistrationId("portalasig_engine")
+                .tokenUri(tokenUri)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .authorizationGrantType(new AuthorizationGrantType(authGrantType))
+                .build();
+
         return new InMemoryReactiveClientRegistrationRepository(registration);
     }
 
+    /**
+     * Sets up OAuth2 client manager.
+     */
     @Bean
     public AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager(
             ReactiveClientRegistrationRepository clientRegistrationRepository) {
+
         InMemoryReactiveOAuth2AuthorizedClientService clientService =
                 new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
+
         ReactiveOAuth2AuthorizedClientProvider authorizedClientProvider =
                 ReactiveOAuth2AuthorizedClientProviderBuilder.builder().clientCredentials().build();
+
         AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
                 new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
                         clientRegistrationRepository, clientService);
+
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
         return authorizedClientManager;
     }

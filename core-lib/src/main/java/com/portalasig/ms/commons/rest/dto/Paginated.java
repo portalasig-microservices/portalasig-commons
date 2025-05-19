@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * Paginated response containing a subset of the result set.
+ *
+ * @param <T> the type of elements in the paginated response
  */
 @ApiModel(description = "A paginated aware response including paging information with an Array of ")
 @Data

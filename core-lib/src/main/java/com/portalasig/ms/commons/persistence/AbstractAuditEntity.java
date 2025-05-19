@@ -12,6 +12,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * Abstract base class for auditable entities, providing created and updated date fields.
+ */
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @MappedSuperclass

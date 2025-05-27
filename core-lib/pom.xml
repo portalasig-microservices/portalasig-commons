@@ -1,18 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.portalasig</groupId>
-        <artifactId>core-parent</artifactId>
+        <artifactId>core-boot</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>core-lib</artifactId>
 
     <name>${project.artifactId}</name>
-    <description>Common library for PortalAsig Backend</description>
+    <description>
+        Shared library containing common backend components for PortalAsig microservices:
+        includes enums, DTOs, constants, annotations, utility classes, and reusable configurations
+        for Spring Web, Security, OAuth2, WebClient, validation, and serialization.
+    </description>
+
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,6 +27,19 @@
     </properties>
 
     <dependencies>
+        <!-- Spring imports -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -30,14 +49,48 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
-            <scope>compile</scope>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+        <!-- Documentation -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <!-- Utils -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
     </dependencies>
 
@@ -46,30 +99,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <id>validate-style</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <configLocation>${basedir}/google_checks.xml</configLocation>
-                    <consoleOutput>false</consoleOutput>
-                    <failOnViolation>true</failOnViolation>
-                    <violationSeverity>warning</violationSeverity>
-                </configuration>
             </plugin>
-
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>checkstyle</id>
-        </profile>
-    </profiles>
 </project>

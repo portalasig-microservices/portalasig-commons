@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Autoconfigures exception handlers to customize HTTP response.
+ * Autoconfiguration for registering the {@link ApiExceptionHandler} in web applications.
+ * <p>
+ * This configuration is only enabled when the application is a web application.
+ * It imports the {@link ApiExceptionHandler} to handle API exceptions globally.
  */
 @ConditionalOnWebApplication
 @Configuration(proxyBeanMethods = false)

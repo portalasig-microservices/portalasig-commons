@@ -5,10 +5,25 @@
 
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
+
     <module name="TreeWalker">
+        <!-- Reglas de estilo Java básicas -->
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+        <module name="NeedBraces"/>
+        <module name="EmptyBlock"/>
+        <module name="EqualsHashCode"/>
+        <module name="MethodParamPad"/>
+        <module name="RightCurly"/>
+        <module name="LeftCurly"/>
+
+        <!-- Comentarios -->
         <module name="JavadocType"/>
+        <module name="JavadocStyle"/>
+
         <module name="MissingJavadocType"/>
         <module name="MissingJavadocMethod"/>
+
         <module name="SuppressWarningsHolder"/>
     </module>
 </module>
